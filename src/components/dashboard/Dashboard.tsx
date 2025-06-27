@@ -105,7 +105,24 @@ export function Dashboard() {
 
   const createProfile = async () => {
     try {
-      const metadata = user?.user_metadata
+      // Check if profile already exists
+      const { data: existingProfile, error: selectError } = await supabase
+        .from('vendor_profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single();
+
+      if (existingProfile) {
+        // Profile already exists, do not insert again
+        setProfile(existingProfile);
+        return;
+      }
+      // If selectError is not the 'no rows' error, throw it
+      if (selectError && selectError.code !== 'PGRST116') {
+        throw selectError;
+      }
+
+      const metadata = user?.user_metadata;
       const { error } = await supabase
         .from('vendor_profiles')
         .insert({
@@ -113,14 +130,13 @@ export function Dashboard() {
           business_name: metadata?.business_name || 'My Business',
           service_type: metadata?.service_type || 'Other',
           contact_phone: metadata?.contact_phone || null
-        })
+        });
 
-      if (error) throw error
-      
+      if (error) throw error;
       // Fetch the created profile
-      await fetchProfile()
+      await fetchProfile();
     } catch (error: any) {
-      toast.error('Error creating profile: ' + error.message)
+      toast.error('Error creating profile: ' + error.message);
     }
   }
 
