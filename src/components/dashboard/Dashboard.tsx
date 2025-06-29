@@ -34,6 +34,7 @@ import {
 import { toast } from 'react-hot-toast'
 import { Link } from 'react-router-dom'
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts'
+import CountUp from 'react-countup'
 
 interface VendorProfile {
   id: string
@@ -75,10 +76,13 @@ export function Dashboard() {
   const [uploadingImage, setUploadingImage] = useState(false)
 
   useEffect(() => {
-    if (user) {
-      fetchProfile()
-    }
-  }, [user])
+    if (!user) return;
+    fetchProfile();
+    const interval = setInterval(() => {
+      fetchProfile();
+    }, 10000); // 10 seconds
+    return () => clearInterval(interval);
+  }, [user]);
 
   const fetchProfile = async () => {
     try {
@@ -415,9 +419,9 @@ export function Dashboard() {
               </button>
             </div>
             <div className="text-center">
-              <div className={`text-2xl font-bold mb-2 ${trustLevel.color}`}>
+              <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 0.5 }} className={`text-2xl font-bold mb-2 ${trustLevel.color}`}>
                 {trustLevel.text}
-              </div>
+              </motion.span>
               <p className="text-sm text-navy-600">
                 Your trust level based on verified jobs and customer reviews
               </p>
@@ -438,7 +442,7 @@ export function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="text-center group relative">
                 <div className="text-3xl font-bold text-primary-600 mb-2">
-                  {profile?.total_jobs || 0}
+                  <CountUp end={profile.total_jobs || 0} duration={1} />
                 </div>
                 <p className="text-navy-600 text-sm">Total Jobs</p>
                 <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-navy-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -447,7 +451,7 @@ export function Dashboard() {
               </div>
               <div className="text-center group relative">
                 <div className="text-3xl font-bold text-primary-600 mb-2">
-                  {profile?.verified_jobs || 0}
+                  <CountUp end={profile.verified_jobs || 0} duration={1} />
                 </div>
                 <p className="text-navy-600 text-sm">Verified Jobs</p>
                 <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-navy-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
@@ -457,7 +461,7 @@ export function Dashboard() {
               <div className="text-center group relative">
                 <div className="flex items-center justify-center mb-2">
                   <span className="text-3xl font-bold text-yellow-600 mr-1">
-                    {profile?.avg_rating ? profile.avg_rating.toFixed(1) : '0.0'}
+                    <CountUp end={profile.avg_rating || 0} duration={1} decimals={1} />
                   </span>
                   <Star className="w-6 h-6 text-yellow-400 fill-current" />
                 </div>
