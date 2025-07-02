@@ -390,7 +390,7 @@ export function VendorRatingPage() {
           className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 mb-8"
         >
           <h3 className="text-xl font-bold text-navy-800 mb-6 text-center">
-            How would you rate your overall experience?
+            Do you trust this Vendor to deliver?
           </h3>
           
           <div className="space-y-6">
