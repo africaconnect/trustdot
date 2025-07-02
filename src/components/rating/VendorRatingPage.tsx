@@ -53,10 +53,10 @@ export function VendorRatingPage() {
   const [trustLevel, setTrustLevel] = useState(2) // Default to "Good"
 
   const trustLevels = [
-    { value: 0, label: 'Bad', emoji: '😞', color: '#EF4444' },
-    { value: 1, label: 'Okay', emoji: '😐', color: '#F59E0B' },
-    { value: 2, label: 'Good', emoji: '🙂', color: '#3fbf75' },
-    { value: 3, label: 'Excellent', emoji: '🤩', color: '#232c3e' }
+     { value: 0, label: 'Not at all', emoji: '😞', color: '#EF4444' },
+     { value: 1, label: 'Maybe', emoji: '😐', color: '#F59E0B' },
+     { value: 2, label: 'Yes', emoji: '🙂', color: '#3fbf75' },
+     { value: 3, label: 'Absolutely!', emoji: '🤩', color: '#232c3e' }
   ]
 
   useEffect(() => {
